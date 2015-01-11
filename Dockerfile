@@ -11,6 +11,7 @@ RUN apt-get update -qq && \
     groupadd --gid 1000 web && \
     useradd --create-home --uid 1000 --gid 1000 --no-user-group --shell /bin/bash web && \
     chown -R web:web /app && \
+    gem install foreman && \
     curl -Ls https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2 | tar jx --wildcards --strip-components=2 --directory /usr/local/bin/ phantomjs-1.9.7-linux-x86_64/bin/phantomjs && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -18,5 +19,3 @@ ADD gemrc /usr/local/etc/gemrc
 
 WORKDIR /app
 USER web
-
-RUN gem install foreman
