@@ -6,7 +6,7 @@ RUN groupadd --gid 1000 web && \
     chown -R web:web /app
 
 RUN apt-get update -qq && \
-    apt-get install -y libmysqlclient-dev libpq-dev postgresql-client nodejs imagemagick libmagickcore-dev libmagickwand-dev && \
+    apt-get install -y libmysqlclient-dev libpq-dev postgresql-client nodejs imagemagick libmagickcore-dev libmagickwand-dev supervisor && \
     apt-get clean && \
     curl -Ls https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2 | tar jx --wildcards --strip-components=2 --directory /usr/local/bin/ phantomjs-1.9.8-linux-x86_64/bin/phantomjs && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
