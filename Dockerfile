@@ -6,18 +6,23 @@ RUN groupadd --gid 1000 web && \
     chown -R web:web /app
 
 RUN apt-get update -qq && \
-    apt-get install -y libmysqlclient-dev libpq-dev postgresql-client nodejs imagemagick libmagickcore-dev libmagickwand-dev supervisor && \
+    apt-get install -y libpq-dev postgresql-client nodejs imagemagick libmagickcore-dev libmagickwand-dev && \
     apt-get clean && \
-    curl -Ls https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2 | tar jx --wildcards --strip-components=2 --directory /usr/local/bin/ phantomjs-1.9.8-linux-x86_64/bin/phantomjs && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN gem install foreman --no-document
+RUN curl -Ls https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2 | tar jx --wildcards --strip-components=2 --directory /usr/local/bin/ phantomjs-1.9.8-linux-x86_64/bin/phantomjs && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV GEM_HOME /home/web/.gem
 ENV GEM_PATH ${GEM_HOME}:${GEM_PATH}
 ENV PATH ${PATH}:${GEM_HOME}/bin
 
+RUN mkdir /etc/service/rails
+
 ADD gemrc /usr/local/etc/gemrc
+ADD 01-whenever.sh /etc/my_init.d/01-whenever.sh
+ADD rails.sh /etc/service/rails/run
+
+RUN chmod +x /etc/service/rails/run /etc/my_init.d/01-whenever.sh
 
 WORKDIR /app
-USER web
